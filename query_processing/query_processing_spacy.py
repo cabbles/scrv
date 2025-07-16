@@ -172,8 +172,8 @@ query_extract(example)
 
 # example with both fns
 
-for query in query_split(example):
-  print(' '.join(query_extract(query)))
+# for query in query_split(example):
+#   print(' '.join(query_extract(query)))
 
 
 # # master fn
