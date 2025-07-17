@@ -7,7 +7,6 @@
 
 
 import os
-import numpy as np
 import string
 
 try: import spacy
@@ -86,13 +85,19 @@ get_noun_phrases(example)
 # In[10]:
 
 
+import re
+
+
+# In[11]:
+
+
 # lower cases, strips, and removes punctuation from text
 
 def clean(text):
   return text.lower().strip().translate(str.maketrans('', '', string.punctuation))
 
 
-# In[11]:
+# In[12]:
 
 
 # filters a text only for tokens that are in the filter text OR have a certain part of speech
@@ -103,10 +108,20 @@ def filter_include(text, filter_txt, filter_pos):
   #                                      ^ in filter text                              ^ certain part of speech
 
 
+# In[13]:
+
+
+# separates a string into a list but preserves items in the preservation list
+
+def split_preserve(text, preserve_list):
+    pattern = '|'.join(map(re.escape, sorted(preserve_list, key = len, reverse = True))) + r'|\S+'
+    return re.findall(pattern, text)
+
+
 # # query editing
 # query decomposition, query extraction
 
-# In[12]:
+# In[14]:
 
 
 # query decomposition
@@ -134,13 +149,13 @@ def query_split(query):
   return result
 
 
-# In[13]:
+# In[15]:
 
 
 query_split(example)
 
 
-# In[14]:
+# In[16]:
 
 
 # query extraction
@@ -151,7 +166,7 @@ def query_extract(query):
   ents = get_ents(query)
 
   important_text = ents
-  important_pos = ['NOUN', 'PROPN', 'VERB', 'ADJ', 'ADV']
+  important_pos = ['NOUN', 'PROPN', 'VERB', 'ADJ', 'ADV', 'PART']
 
   lemmas = list(dict.fromkeys(lemmas)) # eliminates redundant elements
   lemmas = filter_include(clean(str(lemmas)),
@@ -161,13 +176,13 @@ def query_extract(query):
   return lemmas
 
 
-# In[15]:
+# In[17]:
 
 
 query_extract(example)
 
 
-# In[16]:
+# In[18]:
 
 
 # example with both fns
@@ -180,7 +195,7 @@ query_extract(example)
 # full query transformation
 # 
 
-# In[17]:
+# In[19]:
 
 
 # full query transformation
@@ -205,7 +220,7 @@ def query_transform(query = None):
   return transform_query
 
 
-# In[18]:
+# In[20]:
 
 
 query_transform(example)
